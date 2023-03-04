@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./common.css">
+    <style>
+        body {
+            background-image: url(./images/2.jpg);
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 用户登录 -->
+    <div class="box2">
+        <form action="#" id="login" enctype="application/x-www-form-urlencoded">
+            <h2>Login</h2>
+            <input type="text" placeholder="username" id="username">
+            <input type="password" placeholder="password" id="password">
+            <button>OK</button>
+            <a id="a2">If you don't already have an account, click here to register</a>
+        </form>
+
+    </div>
+
+</body>
+<script>
+    let a = document.querySelector('#a2')
+    a.addEventListener('click', function () {
+        location.href = 'file:///E:/web%E5%AD%A6%E4%B9%A0/Node.js/page/register.html'
+    })
+    document.querySelector('#login').addEventListener('submit', function (e) {
+        e.preventDefault()
+        let username = document.getElementById('username').value
+        let password = document.getElementById('password').value
+        let xhr = new XMLHttpRequest();
+        xhr.open('post', 'http://127.0.0.1:3007/api/login')
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+        xhr.send(`username=${username}&password=${password}`)
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
+                    console.log(xhr.response)
+                    let content = JSON.parse(xhr.response)
+                    console.log(content)
+                    alert(content.message)
+                    // alert(content.token)
+
+                    // 存储token
+                    if (content.message === '登录成功') {
+                        // localStorage.setItem('token', content.token)
+                        // // 刷新，更新localstorage
+                        // window.location.reload()
+                        window.location.href = window.location.href.replace('login.html', 'index.html')
+                    }
+                    console.log(xhr.status)
+                    if (xhr.status === 204) {
+                        alert('登录失败')
+                    }
+
+                }
+
+            }
+            
+
+
+        }
+    })
+
+</script>
+
+</html>

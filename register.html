@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin="anonymous" src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <link rel="stylesheet" href="./common.css">
+    <style>
+        body {
+            background-image: url(./images/1.jpg);
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- 用户注册 -->
+    <div class="box1">
+        <form action="#" id="reg" enctype="application/x-www-form-urlencoded">
+            <h2>Register</h2>
+            <input type="text" placeholder="username" id="username">
+            <input type="password" placeholder="password" id="password">
+            <button>OK</button>
+            <a id="a1">If you have an account, click here to log in</a>
+        </form>
+        
+    </div>
+    
+</body>
+<script>
+
+    let a = document.querySelector('#a1')
+    a.addEventListener('click', function() {
+        location.href = 'file:///E:/web%E5%AD%A6%E4%B9%A0/Node.js/page/login.html'
+    })
+    document.querySelector('#reg').addEventListener('submit', function(e) {
+        e.preventDefault()
+        let username = document.getElementById('username').value
+        let password = document.getElementById('password').value
+        let xhr = new XMLHttpRequest();
+        xhr.open('post','http://127.0.0.1:3007/api/register')
+        xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+        xhr.send(`username=${username}&password=${password}`)
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState===4 && xhr.status===200) {
+                console.log(xhr.response)
+                let content = JSON.parse(xhr.response)
+                alert(content.message)
+                if(content.message === '注册成功') {
+                    window.location.href=window.location.href.replace('register.html','login.html')
+                }
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1 {
+            font-size: 80px;
+            position: absolute;
+            top: 25%;
+            left: 35%;
+        }
+        button {
+            padding: 0.4rem 1rem;
+            background: #417dff;
+            color: white;
+            border: 1px solid #fff;
+            outline: none;
+            /* 鼠标放上变小手 */
+            cursor: pointer;
+            width: 50px;
+            border-radius: 10px;
+            transition: all 30ms ease-in;
+            margin: 400px 300px;
+            font-size: 14px;
+            padding: 8px 0;
+        }
+        /* 被选中时候缩小 */
+        button:active{
+            transform: scale(0.95,0.95);
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome!</h1>
+    <button>exit</button>
+</body>
+<script>
+    window.onload = function() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('get','http://127.0.0.1:3007/api/getinfo')
+        xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+        // xhr.setRequestHeader('Authorization',localStorage.getItem('token'))
+        xhr.send()
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState===4 && xhr.status===200) {
+                console.log(xhr.response)
+                // let content = JSON.parse(xhr.response)
+                // console.log(content)
+                let content = JSON.parse(xhr.response)
+                console.log(content.message);
+                // alert(content.message)
+                if (content.status === 0) {
+                    alert('欢迎您！')
+                } else {
+                    alert('未输入密码，登陆失败！')
+                    window.location.href=window.location.href.replace('index.html','login.html')
+                }
+                
+            }
+        }
+       
+
+    }
+    document.querySelector('button').addEventListener('click', function() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('post','http://127.0.0.1:3007/api/logout')
+        xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+        xhr.send()
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState===4 && xhr.status===200) {
+                let content = JSON.parse(xhr.response)
+                if(content.status === 0) {
+                    alert(content.message)
+                    window.location.href=window.location.href.replace('index.html','login.html')
+                }
+
+            }
+                
+            }
+        }
+    )
+</script>
+
+</html>
